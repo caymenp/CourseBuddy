@@ -3,7 +3,9 @@ package android.coursetrackerapp.coursetracker.UI;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.coursetrackerapp.coursetracker.Database.Repository;
 import android.coursetrackerapp.coursetracker.R;
+import android.coursetrackerapp.coursetracker.entities.Term;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,5 +25,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Repository repository = new Repository(getApplication());
+        Term newTerm = new Term(0, "TEST", "TOMORROW", "YESTERDAY");
+        repository.insert(newTerm);
     }
 }
