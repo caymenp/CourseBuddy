@@ -12,7 +12,7 @@
         android:theme="@style/Theme.CourseTracker"
         tools:targetApi="31">
         <activity
-            android:name=".UI.ClassDetails"
+            android:name=".UI.CourseDetails"
             android:exported="false"
             android:label="Class Details and Course List"
             android:parentActivityName=".UI.TermDetails"/>
