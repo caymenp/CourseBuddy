@@ -22,7 +22,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 /** CourseTrackerDatabaseBuilder */
-@Database(entities = {Term.class, Course.class, Assessment.class}, version = 1, exportSchema = false)
+@Database(entities = {Term.class, Course.class, Assessment.class}, version = 2, exportSchema = false)
 public abstract class CourseTrackerDatabaseBuilder extends RoomDatabase {
     public abstract TermDAO termDAO();
     public abstract CourseDAO courseDAO();
