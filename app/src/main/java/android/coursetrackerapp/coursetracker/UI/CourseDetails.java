@@ -11,9 +11,12 @@ import android.coursetrackerapp.coursetracker.entities.Assessment;
 import android.coursetrackerapp.coursetracker.entities.Course;
 import android.coursetrackerapp.coursetracker.entities.Term;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -21,13 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDetails extends AppCompatActivity {
-    EditText editName;
-    EditText editStartDate;
-    EditText editEndDate;
-    EditText editStatus;
-    EditText editInstrucName;
-    EditText editInstrucPhone;
-    EditText editInstrucEmail;
+    TextView courseName;
+    TextView courseStartDateView;
+    TextView courseEndDateView;
+    TextView courseStatusView;
+    TextView instructorNameView;
+    TextView instructorPhoneView;
+    TextView instructorEmailView;
+    Button scheduleReminder;
 
     int courseID;
     int termID;
@@ -46,31 +50,31 @@ public class CourseDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_details);
 
-        editName= findViewById(R.id.courseName);
-        editStartDate= findViewById(R.id.courseStartDate);
-        editEndDate= findViewById(R.id.courseEndDate);
-        editStatus = findViewById(R.id.courseStatus);
-        editInstrucName = findViewById(R.id.instructorName);
-        editInstrucPhone = findViewById(R.id.instructorPhone);
-        editInstrucEmail = findViewById(R.id.instructorEmail);
+        courseName= findViewById(R.id.courseName);
+        courseStartDateView= findViewById(R.id.courseStartDateView);
+        courseEndDateView= findViewById(R.id.courseEndDateView);
+        courseStatusView = findViewById(R.id.courseStatusView);
+        instructorNameView = findViewById(R.id.instructorNameView);
+        instructorPhoneView = findViewById(R.id.instructorPhoneView);
+        instructorEmailView = findViewById(R.id.instructorEmailView);
 
 
         courseID = getIntent().getIntExtra("courseID", -1);
         termID = getIntent().getIntExtra("termID", -1);
-        courseTitle = getIntent().getStringExtra("termTitle");
+        courseTitle = getIntent().getStringExtra("courseTitle");
         startDate = getIntent().getStringExtra("startDate");
         endDate = getIntent().getStringExtra("endDate");
         status = getIntent().getStringExtra("status");
         instructorName = getIntent().getStringExtra("instructorName");
         instructorPhone = getIntent().getStringExtra("instructorPhone");
         instructorEmail = getIntent().getStringExtra("instructorEmail");
-        editName.setText(courseTitle);
-        editStartDate.setText(startDate);
-        editEndDate.setText(endDate);
-        editStatus.setText(status);
-        editInstrucName.setText(instructorName);
-        editInstrucPhone.setText(instructorPhone);
-        editInstrucEmail.setText(instructorEmail);
+        courseName.setText(courseTitle);
+        courseStartDateView.setText(startDate);
+        courseEndDateView.setText(endDate);
+        courseStatusView.setText(status);
+        instructorNameView.setText(instructorName);
+        instructorPhoneView.setText(instructorPhone);
+        instructorEmailView.setText(instructorEmail);
         repo = new Repository(getApplication());
 
         //Adding Assessments to Related Courses
@@ -86,32 +90,73 @@ public class CourseDetails extends AppCompatActivity {
         assessmentAdapter.setAssessment(filteredAssessments);
 
 
-        Button button = findViewById(R.id.saveCourse);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(courseID == -1) {
-                    course = new Course(0, termID, editName.getText().toString(), editStartDate.getText().toString(), editEndDate.getText().toString(),
-                            editStatus.getText().toString(), editInstrucName.getText().toString(), editInstrucPhone.getText().toString(), editInstrucEmail.getText().toString());
-                    repo.insert(course);
-                } else {
-                    course = new Course(courseID, termID, editName.getText().toString(), editStartDate.getText().toString(), editEndDate.getText().toString(),
-                            editStatus.getText().toString(), editInstrucName.getText().toString(), editInstrucPhone.getText().toString(), editInstrucEmail.getText().toString());
-                    repo.update(course);
-                }
-            }
-        });
-
-        FloatingActionButton fab=findViewById(R.id.floatingActionButton2);
+        FloatingActionButton fab=findViewById(R.id.addAssessment);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(CourseDetails.this, AssessmentDetails.class);
+                Intent intent=new Intent(CourseDetails.this, EditAssessment.class);
+                intent.putExtra("courseID", courseID);
                 startActivity(intent);
             }
         });
 
+        scheduleReminder = findViewById(R.id.courseReminder);
+        scheduleReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CourseDetails.this, NotificationDetails.class);
+                intent.putExtra("title", "⏰ "+ courseTitle + " -- Course Reminder from Course Buddy!");
+                intent.putExtra("message", "Reminder for your course! \n" + courseTitle + " Starts: " + startDate +
+                        "\n" + courseTitle + " Ends: "+endDate);
+                intent.putExtra("startDate", startDate);
+                intent.putExtra("endDate", endDate);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate options menu
+        getMenuInflater().inflate(R.menu.coursedetail, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.editCourse:
+                Intent intent = new Intent(CourseDetails.this, EditCourse.class);
+                intent.putExtra("termID", termID);
+                intent.putExtra("courseID", courseID);
+                intent.putExtra("courseTitle", courseTitle);
+                intent.putExtra("courseStart", startDate);
+                intent.putExtra("courseEnd", endDate);
+                intent.putExtra("status", status);
+                intent.putExtra("instructorName", instructorName);
+                intent.putExtra("instructorPhone", instructorPhone);
+                intent.putExtra("instructorEmail", instructorEmail);
+                startActivity(intent);
+
+                return true;
+            case R.id.deleteCourse:
+                return true;
+
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        List<Assessment> allAssessments = repo.getAllAssessmentsByCourseByTerm(courseID);
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
+        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+        recyclerView.setAdapter(assessmentAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        assessmentAdapter.setAssessment(allAssessments);
     }
 
 }

@@ -35,7 +35,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
         private AssessmentViewHolder(View itemview) {
             super(itemview);
             textViewAssessmentName = itemview.findViewById(R.id.textViewAssessmentName);
-            textViewAssessmentType = itemview.findViewById(R.id.textViewAssessmentType);
+            textViewAssessmentType = itemview.findViewById(R.id.textViewCourseStatus);
             itemview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -44,6 +44,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
                     Intent intent = new Intent(context, AssessmentDetails.class);
                     intent.putExtra("assessmentID", current.getAssessmentID());
                     intent.putExtra("courseID", current.getCourseID());
+                    intent.putExtra("assessmentName", current.getAssessmentName());
                     intent.putExtra("assessmentType", current.getAssessmentType());
                     intent.putExtra("assessmentStartDate", current.getAssessmentStartDate());
                     intent.putExtra("assessmentEndDate", current.getAssessmentEndDate());
@@ -81,11 +82,8 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
     public void onBindViewHolder(@NonNull AssessmentAdapter.AssessmentViewHolder holder, int position) {
         if (mAssessment != null) {
             Assessment current  = mAssessment.get(position);
-            int courseID = current.getCourseID();
             String assessmentName = current.getAssessmentName();
             String assessmentType = current.getAssessmentType();
-            String startDate = current.getAssessmentStartDate();
-            String endDate = current.getAssessmentEndDate();
 
             holder.textViewAssessmentName.setText(assessmentName);
             holder.textViewAssessmentType.setText(assessmentType);

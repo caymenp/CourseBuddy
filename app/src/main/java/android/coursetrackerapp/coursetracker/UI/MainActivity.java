@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Repository repository = new Repository(getApplication());
-        Term newTerm = new Term(0, "TEST", "TOMORROW", "YESTERDAY");
-        repository.insert(newTerm);
     }
+
 }

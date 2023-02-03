@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,19 +15,49 @@
         android:theme="@style/Theme.CourseTracker"
         tools:targetApi="31">
         <activity
+            android:name=".UI.NotificationDetails"
+            android:exported="false"
+            android:label="Reminder Notifications"/>
+
+        <receiver
+            android:name=".UI.NotificationReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".UI.EditAssessmentNote"
+            android:exported="false"
+            android:label="Assessment Note"
+            android:parentActivityName=".UI.AssessmentDetails" />
+        <activity
+            android:name=".UI.EditAssessment"
+            android:exported="false"
+            android:label="Edit Assessment Details"
+            android:parentActivityName=".UI.AssessmentDetails" />
+        <activity
+            android:name=".UI.EditCourse"
+            android:exported="false"
+            android:label="Edit Course Details"
+            android:parentActivityName=".UI.CourseDetails" />
+        <activity
+            android:name=".UI.EditTerm"
+            android:exported="false"
+            android:label="Edit Term Details"
+            android:parentActivityName=".UI.CourseDetails" />
+        <activity
             android:name=".UI.AssessmentDetails"
             android:exported="false"
             android:label="Assessment Details"
-            android:parentActivityName=".UI.CourseDetails"/>
+            android:parentActivityName=".UI.CourseDetails" />
         <activity
             android:name=".UI.CourseDetails"
             android:exported="false"
-            android:label="Class Details and Course List"
-            android:parentActivityName=".UI.TermDetails" />
+            android:label="Course Details and Assessment List"
+            android:parentActivityName=".UI.CourseDetails" />
         <activity
             android:name=".UI.TermDetails"
             android:exported="false"
-            android:label="Term Details and Class List"
+            android:label="Term Details and Course List"
             android:parentActivityName=".UI.TermList" />
         <activity
             android:name=".UI.TermList"

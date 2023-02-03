@@ -70,11 +70,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @Override
     public CourseAdapter.CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.course_list_item, parent, false);
-        return new CourseViewHolder(itemView);
+        return new CourseViewHolder((itemView));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CourseAdapter.CourseViewHolder holder, int position) {
         if (mCourse != null) {
             Course current  = mCourse.get(position);
             String courseTitle = current.getCourseTitle();
@@ -88,7 +88,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             holder.textViewCourseName.setText(courseTitle);
             holder.textViewCourseStatus.setText(status);
         } else {
-            holder.textViewCourseStatus.setText("No Course Name");
+            holder.textViewCourseName.setText("No Course Name");
             holder.textViewCourseStatus.setText("No Course Status");
 
         }
