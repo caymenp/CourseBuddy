@@ -60,56 +60,56 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Default Start Reminder"
-                    android:textAlignment="center"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:id="@+id/startDateTimeView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Time And Day "
-                    android:textAlignment="center"/>
-                <Button
-                    android:id="@+id/changeStartReminder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Change Date/Time"
-                    android:textSize="12sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Default Start Reminder"
+                        android:textAlignment="center"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/startDateTimeView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Time And Day "
+                        android:textAlignment="center"/>
+                    <Button
+                        android:id="@+id/changeStartReminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Change Date/Time"
+                        android:textSize="12sp"/>
                 </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/endColumn"
-                android:visibility="invisible"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
+                <LinearLayout
+                    android:id="@+id/endColumn"
+                    android:visibility="invisible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Default End Reminder: "
-                    android:textAlignment="center"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:id="@+id/endDateTimeView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Time And Day "
-                    android:textAlignment="center"/>
-                <Button
-                    android:id="@+id/changeEndReminder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Change Date/Time"
-                    android:textSize="12sp"/>
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Default End Reminder: "
+                        android:textAlignment="center"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/endDateTimeView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Time And Day "
+                        android:textAlignment="center"/>
+                    <Button
+                        android:id="@+id/changeEndReminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Change Date/Time"
+                        android:textSize="12sp"/>
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

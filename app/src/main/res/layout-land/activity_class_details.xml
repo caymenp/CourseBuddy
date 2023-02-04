@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="vertical"
     tools:context=".UI.CourseDetails">
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -40,26 +42,28 @@
                 android:paddingBottom="5dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="164dp"
                     android:layout_height="wrap_content"
                     android:text="Start Date: "
+                    android:textAlignment="textEnd"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/courseStartDateView"
-                    android:layout_width="109dp"
+                    android:layout_width="171dp"
                     android:layout_height="wrap_content"
                     android:duplicateParentState="false"
                     android:lines="1"
                     android:text="2022/09/02"
-                    android:textAlignment="center"
+                    android:textAlignment="textStart"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:text="End Date: "
+                    android:textAlignment="textEnd"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -69,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:lines="1"
                     android:text="2022/01/23"
-                    android:textAlignment="center"
+                    android:textAlignment="viewStart"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -101,13 +105,13 @@
                     android:layout_weight="1"
                     android:text="Remind Me"
                     app:icon="@android:drawable/ic_lock_idle_alarm" />
-
             </LinearLayout>
 
             <View
-                android:id="@+id/divider21"
+                android:id="@+id/divider5"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_weight="1"
                 android:background="?android:attr/listDivider" />
 
             <LinearLayout
@@ -204,11 +208,20 @@
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/divider3"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <View
+                    android:id="@+id/divider4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textView4"
@@ -242,12 +255,12 @@
                 android:visibility="gone"/>
 
             <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/assessmentRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        android:padding="10dp">
-    </androidx.recyclerview.widget.RecyclerView>
+                android:id="@+id/assessmentRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView4"></androidx.recyclerview.widget.RecyclerView>
 
         </LinearLayout>
 

@@ -1,5 +1,9 @@
 package android.coursetrackerapp.coursetracker.UI;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,15 +12,17 @@ import android.content.Intent;
 import android.coursetrackerapp.coursetracker.Database.Repository;
 import android.coursetrackerapp.coursetracker.R;
 import android.coursetrackerapp.coursetracker.entities.Assessment;
+import android.coursetrackerapp.coursetracker.entities.CourseNotes;
 import android.coursetrackerapp.coursetracker.entities.Course;
-import android.coursetrackerapp.coursetracker.entities.Term;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -32,6 +38,7 @@ public class CourseDetails extends AppCompatActivity {
     TextView instructorPhoneView;
     TextView instructorEmailView;
     Button scheduleReminder;
+    Button courseNotes;
 
     int courseID;
     int termID;
@@ -42,9 +49,40 @@ public class CourseDetails extends AppCompatActivity {
     String instructorName;
     String instructorPhone;
     String instructorEmail;
+    ImageView arrow;
+    TextView emptyNote;
 
     Repository repo;
     Course course;
+
+    ActivityResultLauncher<Intent> activityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == 80) {
+                        Intent intent = result.getData();
+                        if (intent != null) {
+                            String courseTitle = intent.getStringExtra("courseTitle");
+                            String startDate = intent.getStringExtra("startDate");
+                            String endDate = intent.getStringExtra("endDate");
+                            String status = intent.getStringExtra("status");
+                            String instructorName = intent.getStringExtra("instructorName");
+                            String instructorPhone = intent.getStringExtra("instructorPhone");
+                            String instructorEmail = intent.getStringExtra("instructorEmail");
+                            courseName.setText(courseTitle);
+                            courseStartDateView.setText(startDate);
+                            courseEndDateView.setText(endDate);
+                            courseStatusView.setText(status);
+                            instructorNameView.setText(instructorName);
+                            instructorPhoneView.setText(instructorPhone);
+                            instructorEmailView.setText(instructorEmail);
+                        }
+                    }
+                }
+            }
+    );
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +95,9 @@ public class CourseDetails extends AppCompatActivity {
         instructorNameView = findViewById(R.id.instructorNameView);
         instructorPhoneView = findViewById(R.id.instructorPhoneView);
         instructorEmailView = findViewById(R.id.instructorEmailView);
+
+        emptyNote = findViewById(R.id.emptyNote);
+        arrow = findViewById(R.id.emptyArrow);
 
 
         courseID = getIntent().getIntExtra("courseID", -1);
@@ -89,6 +130,12 @@ public class CourseDetails extends AppCompatActivity {
         }
         assessmentAdapter.setAssessment(filteredAssessments);
 
+        if (filteredAssessments.isEmpty()) {
+            emptyNote.setText("No assessments, yet! \n \nAdd assessments, by clicking the green button in the bottom right of your screen!");
+            emptyNote.setVisibility(View.VISIBLE);
+            arrow.setVisibility(View.VISIBLE);
+        }
+
 
         FloatingActionButton fab=findViewById(R.id.addAssessment);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -105,11 +152,20 @@ public class CourseDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CourseDetails.this, NotificationDetails.class);
-                intent.putExtra("title", "⏰ "+ courseTitle + " -- Course Reminder from Course Buddy!");
-                intent.putExtra("message", "Reminder for your course! \n" + courseTitle + " Starts: " + startDate +
-                        "\n" + courseTitle + " Ends: "+endDate);
+                intent.putExtra("title", courseTitle);
+                intent.putExtra("message", "course");
                 intent.putExtra("startDate", startDate);
                 intent.putExtra("endDate", endDate);
+                startActivity(intent);
+            }
+        });
+
+        courseNotes = findViewById(R.id.courseNotes);
+        courseNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CourseDetails.this, CourseNotesList.class);
+                intent.putExtra("courseID", courseID);
                 startActivity(intent);
             }
         });
@@ -138,14 +194,35 @@ public class CourseDetails extends AppCompatActivity {
                 intent.putExtra("instructorName", instructorName);
                 intent.putExtra("instructorPhone", instructorPhone);
                 intent.putExtra("instructorEmail", instructorEmail);
-                startActivity(intent);
+                activityLauncher.launch(intent);
 
                 return true;
             case R.id.deleteCourse:
+                deleteCourse();
                 return true;
 
         }
         return super.onOptionsItemSelected(menuItem);
+    }
+
+    private void deleteCourse() {
+        Course currentCourse = null;
+        for (Course c : repo.getAllCourses()) {
+            if (courseID == c.getCourseID()) {
+                currentCourse = c;
+            }
+        }
+
+        if (!(repo.getAllAssessmentsByCourseByTerm(courseID).isEmpty())) {
+            Toast.makeText(CourseDetails.this, "This course has " + repo.getAllAssessmentsByCourseByTerm(courseID).size() + " " +
+                            "assessments. \n Cannot delete course, until assessments are deleted.",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            repo.delete(currentCourse);
+            Toast.makeText(CourseDetails.this, courseName.getText().toString() + " Successfully Deleted",
+                    Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     @Override
@@ -157,6 +234,16 @@ public class CourseDetails extends AppCompatActivity {
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         assessmentAdapter.setAssessment(allAssessments);
+
+        if (allAssessments.isEmpty()) {
+            emptyNote.setText("No assessments, yet! \n \nAdd assessments, by clicking the green button in the bottom right of your screen!");
+            emptyNote.setVisibility(View.VISIBLE);
+            arrow.setVisibility(View.VISIBLE);
+        } else {
+            emptyNote.setVisibility(View.GONE);
+            arrow.setVisibility(View.GONE);
+        }
+
     }
 
 }

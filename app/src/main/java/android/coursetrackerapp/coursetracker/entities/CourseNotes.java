@@ -12,25 +12,23 @@ package android.coursetrackerapp.coursetracker.entities;/**
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.time.LocalDate;
-
 /** AssessmentNotes */
-@Entity(tableName = "assessmentNotes")
-public class AssessmentNotes {
+@Entity(tableName = "courseNotes")
+public class CourseNotes {
     @PrimaryKey(autoGenerate = true)
     private int noteID;
-    private int assessmentID;
+    private int courseID;
     private String date;
     private String note;
 
     // Constructor
 
-    public AssessmentNotes() {
+    public CourseNotes() {
     }
 
-    public AssessmentNotes(int noteID, int assessmentID, String date, String note) {
+    public CourseNotes(int noteID, int courseID, String date, String note) {
         this.noteID = noteID;
-        this.assessmentID = assessmentID;
+        this.courseID = courseID;
         this.date = date;
         this.note = note;
     }
@@ -41,8 +39,8 @@ public class AssessmentNotes {
         return noteID;
     }
 
-    public int getAssessmentID() {
-        return assessmentID;
+    public int getCourseID() {
+        return courseID;
     }
 
     public String getNote() {
@@ -55,8 +53,8 @@ public class AssessmentNotes {
         this.noteID = noteID;
     }
 
-    public void setAssessmentID(int assessmentID) {
-        this.assessmentID = assessmentID;
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
     }
 
     public void setNote(String note) {

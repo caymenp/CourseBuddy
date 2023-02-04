@@ -107,13 +107,13 @@ public class EditTerm extends AppCompatActivity {
                     term = new Term(0, editTermTitle.getText().toString(),
                             editTermStart.getText().toString(), editTermEnd.getText().toString());
                     repo.insert(term);
-                   finish();
+                    updateUI();
 
                 } else if (!(id == -1)) {
                     term = new Term(id, editTermTitle.getText().toString(),
                             editTermStart.getText().toString(), editTermEnd.getText().toString());
                     repo.update(term);
-                    finish();
+                    updateUI();
                 }
 
             }
@@ -130,4 +130,12 @@ public class EditTerm extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+ private void updateUI() {
+        Intent intent = new Intent();
+        intent.putExtra("termTitle", editTermTitle.getText().toString());
+        intent.putExtra("startDate", editTermStart.getText().toString());
+        intent.putExtra("endDate", editTermEnd.getText().toString());
+        setResult(78, intent);
+        finish();
+ }
 }

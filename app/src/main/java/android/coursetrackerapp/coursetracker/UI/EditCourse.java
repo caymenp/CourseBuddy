@@ -10,10 +10,13 @@ import android.coursetrackerapp.coursetracker.entities.Course;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class EditCourse extends AppCompatActivity {
@@ -25,6 +28,8 @@ public class EditCourse extends AppCompatActivity {
     EditText editInstructorName;
     EditText editInstructorPhone;
     EditText editInstructorEmail;
+
+    Spinner statusSpinner;
 
     int courseID;
     int termID;
@@ -47,7 +52,6 @@ public class EditCourse extends AppCompatActivity {
         editCourseTitle = findViewById(R.id.editCourseTitle);
         editCourseStart = findViewById(R.id.editCourseStart);
         editCourseEnd = findViewById(R.id.editCourseEnd);
-        editCourseStatus = findViewById(R.id.editCourseStatus);
         editInstructorName = findViewById(R.id.editInstructorName);
         editInstructorPhone = findViewById(R.id.editInstructorPhone);
         editInstructorEmail = findViewById(R.id.editInstructorEmail);
@@ -67,11 +71,11 @@ public class EditCourse extends AppCompatActivity {
         editCourseTitle.setText(courseTitle);
         editCourseStart.setText(courseStart);
         editCourseEnd.setText(courseEnd);
-        editCourseStatus.setText(courseStatus);
         editInstructorName.setText(instructorName);
         editInstructorPhone.setText(instructorPhone);
         editInstructorEmail.setText(instructorEmail);
 
+        initializeCourseStatus();
 
         final Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
@@ -119,17 +123,44 @@ public class EditCourse extends AppCompatActivity {
             public void onClick(View view) {
                 if(courseID == -1) {
                     course = new Course(0, termID, editCourseTitle.getText().toString(), editCourseStart.getText().toString(), editCourseEnd.getText().toString(),
-                            editCourseStatus.getText().toString(), editInstructorName.getText().toString(), editInstructorPhone.getText().toString(), editInstructorEmail.getText().toString());
+                            statusSpinner.getSelectedItem().toString(), editInstructorName.getText().toString(), editInstructorPhone.getText().toString(), editInstructorEmail.getText().toString());
                     repo.insert(course);
-                    finish();
+                    updateUI();
                 } else {
                     course = new Course(courseID, termID, editCourseTitle.getText().toString(), editCourseStart.getText().toString(), editCourseEnd.getText().toString(),
-                            editCourseStatus.getText().toString(), editInstructorName.getText().toString(), editInstructorPhone.getText().toString(), editInstructorEmail.getText().toString());
+                            statusSpinner.getSelectedItem().toString(), editInstructorName.getText().toString(), editInstructorPhone.getText().toString(), editInstructorEmail.getText().toString());
                     repo.update(course);
-                    finish();
+                    updateUI();
                 }
             }
         });
+    }
+
+    private void initializeCourseStatus() {
+        statusSpinner = findViewById(R.id.statusSpinner);
+        ArrayList<String> courseStatus = new ArrayList<>();
+        courseStatus.add("In Progress");
+        courseStatus.add("Completed");
+        courseStatus.add("Dropped");
+        courseStatus.add("Plan to Take");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+                android.R.layout.simple_spinner_dropdown_item, courseStatus);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        statusSpinner.setAdapter(adapter);
+    }
+    private void updateUI() {
+        Intent intent = new Intent();
+        intent.putExtra("courseTitle", editCourseTitle.getText().toString());
+        intent.putExtra("startDate", editCourseStart.getText().toString());
+        intent.putExtra("endDate", editCourseEnd.getText().toString());
+        intent.putExtra("status", statusSpinner.getSelectedItem().toString());
+        intent.putExtra("instructorName", editInstructorName.getText().toString());
+        intent.putExtra("instructorPhone", editInstructorPhone.getText().toString());
+        intent.putExtra("instructorEmail", editInstructorEmail.getText().toString());
+        setResult(80, intent);
+        finish();
     }
 
     @Override

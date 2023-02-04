@@ -15,9 +15,13 @@
         android:theme="@style/Theme.CourseTracker"
         tools:targetApi="31">
         <activity
+            android:name=".UI.CourseNotesList"
+            android:exported="false"
+            android:parentActivityName=".UI.CourseDetails" />
+        <activity
             android:name=".UI.NotificationDetails"
             android:exported="false"
-            android:label="Reminder Notifications"/>
+            android:label="Reminder Notifications" />
 
         <receiver
             android:name=".UI.NotificationReceiver"
@@ -25,10 +29,10 @@
             android:exported="true" />
 
         <activity
-            android:name=".UI.EditAssessmentNote"
+            android:name=".UI.EditCourseNote"
             android:exported="false"
             android:label="Assessment Note"
-            android:parentActivityName=".UI.AssessmentDetails" />
+            android:parentActivityName=".UI.CourseNotesList" />
         <activity
             android:name=".UI.EditAssessment"
             android:exported="false"
@@ -43,7 +47,7 @@
             android:name=".UI.EditTerm"
             android:exported="false"
             android:label="Edit Term Details"
-            android:parentActivityName=".UI.CourseDetails" />
+            android:parentActivityName=".UI.TermDetails" />
         <activity
             android:name=".UI.AssessmentDetails"
             android:exported="false"
@@ -53,7 +57,7 @@
             android:name=".UI.CourseDetails"
             android:exported="false"
             android:label="Course Details and Assessment List"
-            android:parentActivityName=".UI.CourseDetails" />
+            android:parentActivityName=".UI.TermDetails" />
         <activity
             android:name=".UI.TermDetails"
             android:exported="false"

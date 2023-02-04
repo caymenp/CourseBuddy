@@ -1,8 +1,14 @@
 package android.coursetrackerapp.coursetracker.UI;
 
+import static java.time.LocalTime.now;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.coursetrackerapp.coursetracker.R;
 import android.coursetrackerapp.coursetracker.databinding.ActivityMainBinding;
@@ -18,6 +24,12 @@ import android.widget.TimePicker;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
+import java.util.Locale;
 
 public class NotificationDetails extends AppCompatActivity {
 
@@ -28,8 +40,6 @@ public class NotificationDetails extends AppCompatActivity {
     Button confirmEndDate;
     Switch startReminder;
     Switch endReminder;
-    TextInputEditText notificationTitle;
-    TextInputEditText notificationMessage;
     TextView startDateView;
     TextView endDateView;
     LinearLayout endColumn;
@@ -53,8 +63,6 @@ public class NotificationDetails extends AppCompatActivity {
         changeEndReminder = findViewById(R.id.changeEndReminder);
         startReminder = findViewById(R.id.startReminder);
         endReminder = findViewById(R.id.endReminder);
-        notificationTitle = findViewById(R.id.notificationTitle);
-        notificationMessage = findViewById(R.id.notificationMessage);
         startDateView = findViewById(R.id.startDateTimeView);
         endDateView = findViewById(R.id.endDateTimeView);
         endColumn = findViewById(R.id.endColumn);
@@ -69,8 +77,6 @@ public class NotificationDetails extends AppCompatActivity {
         title = getIntent().getStringExtra("title");
         message = getIntent().getStringExtra("message");
 
-        notificationTitle.setText(title);
-        notificationMessage.setText(message);
         endDateView.setText(endDate);
         startDateView.setText(startDate);
 
@@ -153,6 +159,71 @@ public class NotificationDetails extends AppCompatActivity {
             }
         });
 
+        scheduleNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String notificationTitle;
+                String notificationMessage;
+                
+                if (message.equals("course")) {
+                    
+                    if (startReminder.isChecked()) {
+                        String date = startDateView.getText().toString();
+                        notificationTitle = ("⏰ Course, " + title + ", is starting soon!");
+                        notificationMessage = (title + ", is starting on " + date);
+
+                        prepareNotification(notificationTitle, notificationMessage, date);
+                    }
+
+                    if (endReminder.isChecked()) {
+                        String date = endDateView.getText().toString();
+                        notificationTitle = ("⏰ Course, " + title + ", is ending soon!");
+                        notificationMessage = (title + ", is ending on " + date);
+
+                        prepareNotification(notificationTitle, notificationMessage, date);
+                    }
+
+                } else if (message.equals("assessment")) {
+                    if (startReminder.isChecked()) {
+                        String date = startDateView.getText().toString();
+                        notificationTitle = ("📚 Assessment, " + title + ", is starting soon!");
+                        notificationMessage = (title + ", is starting on " + date);
+
+                        prepareNotification(notificationTitle, notificationMessage, date);
+                    }
+
+                    if (endReminder.isChecked()) {
+                        String date = endDateView.getText().toString();
+                        notificationTitle = ("📚 Assessment, " + title + ", is ending soon!");
+                        notificationMessage = (title + ", is ending on " + date);
+
+                        prepareNotification(notificationTitle, notificationMessage, date);
+                    }
+                }
+
+                finish();
+            }
+        });
+    }
+
+    private void prepareNotification(String title, String message, String date) {
+        String dateFromScreen = date;
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        Date myDate = null;
+        try {
+            myDate = sdf.parse(dateFromScreen);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Long trigger = myDate.getTime();
+        Intent intent = new Intent(NotificationDetails.this, NotificationReceiver.class);
+        intent.putExtra("title", title);
+        intent.putExtra("message", message);
+        PendingIntent sender = PendingIntent.getBroadcast(NotificationDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
+        finish();
     }
 
 }

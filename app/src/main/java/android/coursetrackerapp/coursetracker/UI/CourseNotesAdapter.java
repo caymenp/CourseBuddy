@@ -9,13 +9,10 @@ package android.coursetrackerapp.coursetracker.UI;/**
  * Created with Android Studio
  */
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.coursetrackerapp.coursetracker.R;
-import android.coursetrackerapp.coursetracker.entities.Assessment;
-import android.coursetrackerapp.coursetracker.entities.AssessmentNotes;
+import android.coursetrackerapp.coursetracker.entities.CourseNotes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +25,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 /** AssessmentNotesAdapter */
-public class AssessmentNotesAdapter extends RecyclerView.Adapter<AssessmentNotesAdapter.AssessmentNotesViewHolder> {
+public class CourseNotesAdapter extends RecyclerView.Adapter<CourseNotesAdapter.CourseNotesViewHolder> {
 
-    class AssessmentNotesViewHolder extends RecyclerView.ViewHolder {
+    class CourseNotesViewHolder extends RecyclerView.ViewHolder {
         private final TextView noteString;
         private final TextView noteDate;
 
         private final Button shareButton;
 
-        private AssessmentNotesViewHolder(View itemview) {
+        private CourseNotesViewHolder(View itemview) {
             super(itemview);
             noteString = itemview.findViewById(R.id.noteString);
             noteDate = itemview.findViewById(R.id.noteDate);
@@ -60,10 +57,10 @@ public class AssessmentNotesAdapter extends RecyclerView.Adapter<AssessmentNotes
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    final AssessmentNotes current = mAssessmentNotes.get(position);
-                    Intent intent = new Intent(context, EditAssessmentNote.class);
+                    final CourseNotes current = mCourseNotes.get(position);
+                    Intent intent = new Intent(context, EditCourseNote.class);
                     intent.putExtra("noteID", current.getNoteID());
-                    intent.putExtra("assessmentID", current.getAssessmentID());
+                    intent.putExtra("courseID", current.getCourseID());
                     intent.putExtra("note", current.getNote());
                     context.startActivity(intent);
                 }
@@ -71,32 +68,32 @@ public class AssessmentNotesAdapter extends RecyclerView.Adapter<AssessmentNotes
         }
     }
 
-    private List<AssessmentNotes> mAssessmentNotes;
+    private List<CourseNotes> mCourseNotes;
     private final Context context;
     private final LayoutInflater mInflator;
 
-    public AssessmentNotesAdapter(List<AssessmentNotes> mAssessmentNotes, Context context, LayoutInflater mInflator) {
-        this.mAssessmentNotes = mAssessmentNotes;
+    public CourseNotesAdapter(List<CourseNotes> mCourseNotes, Context context, LayoutInflater mInflator) {
+        this.mCourseNotes = mCourseNotes;
         this.context = context;
         this.mInflator = mInflator;
     }
 
-    public AssessmentNotesAdapter(Context context) {
+    public CourseNotesAdapter(Context context) {
         mInflator = LayoutInflater.from(context);
         this.context = context;
     }
 
     @NonNull
     @Override
-    public AssessmentNotesAdapter.AssessmentNotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CourseNotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflator.inflate(R.layout.note_list_item, parent, false);
-        return new AssessmentNotesViewHolder(itemView);
+        return new CourseNotesViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AssessmentNotesAdapter.AssessmentNotesViewHolder holder, int position) {
-        if (mAssessmentNotes != null) {
-            AssessmentNotes current  = mAssessmentNotes.get(position);
+    public void onBindViewHolder(@NonNull CourseNotesViewHolder holder, int position) {
+        if (mCourseNotes != null) {
+            CourseNotes current  = mCourseNotes.get(position);
             String note = current.getNote();
             String date = current.getDate();
 
@@ -108,10 +105,10 @@ public class AssessmentNotesAdapter extends RecyclerView.Adapter<AssessmentNotes
     }
 
     @Override
-    public int getItemCount() {return mAssessmentNotes.size();}
+    public int getItemCount() {return mCourseNotes.size();}
 
-    public void setAssessmentNotes(List<AssessmentNotes> assessmentNotes) {
-        mAssessmentNotes = assessmentNotes;
+    public void setmCourseNotes(List<CourseNotes> courseNotes) {
+        mCourseNotes = courseNotes;
         notifyDataSetChanged();
     }
 }

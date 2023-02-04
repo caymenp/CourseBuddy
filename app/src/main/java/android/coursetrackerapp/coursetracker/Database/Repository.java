@@ -11,11 +11,11 @@ package android.coursetrackerapp.coursetracker.Database;/**
 
 import android.app.Application;
 import android.coursetrackerapp.coursetracker.dao.AssessmentDAO;
-import android.coursetrackerapp.coursetracker.dao.AssessmentNotesDAO;
+import android.coursetrackerapp.coursetracker.dao.CourseNotesDAO;
 import android.coursetrackerapp.coursetracker.dao.CourseDAO;
 import android.coursetrackerapp.coursetracker.dao.TermDAO;
 import android.coursetrackerapp.coursetracker.entities.Assessment;
-import android.coursetrackerapp.coursetracker.entities.AssessmentNotes;
+import android.coursetrackerapp.coursetracker.entities.CourseNotes;
 import android.coursetrackerapp.coursetracker.entities.Course;
 import android.coursetrackerapp.coursetracker.entities.Term;
 
@@ -28,14 +28,14 @@ public class Repository {
     private TermDAO mTermDAO;
     private CourseDAO mCourseDAO;
     private AssessmentDAO mAssessmentDAO;
-    private AssessmentNotesDAO mAssessmentNotesDAO;
+    private CourseNotesDAO mCourseNotesDAO;
     private List<Term> mAllTerms;
     private List<Course> mAllCourses;
     private List<Course> mAllCourseByTerm;
     private List<Assessment> mAllAssessments;
     private List<Assessment> mAllAsssessmentsByCourse;
-    private List<AssessmentNotes> mAllAssessmentNotes;
-    private List<AssessmentNotes> mAllAssessmentNotesByAssessment;
+    private List<CourseNotes> mAllCourseNotes;
+    private List<CourseNotes> mAllCourseNotesByCourse;
 
     private static int NUMBER_OF_THREADS = 20;
     static final ExecutorService databaseExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
@@ -45,7 +45,7 @@ public class Repository {
         mTermDAO = db.termDAO();
         mCourseDAO = db.courseDAO();
         mAssessmentDAO = db.assessmentDAO();
-        mAssessmentNotesDAO = db.assessmentNotesDAO();
+        mCourseNotesDAO = db.courseNotesDAO();
     }
 
     //-----------------------TERMS---------------------------//
@@ -202,43 +202,33 @@ public class Repository {
         }
     }
 
-    //-----------------------Assessment Notes---------------------------//
+    //-----------------------Course Notes---------------------------//
 
-    public List<AssessmentNotes> getAllAssessmentNotes() {
+    public List<CourseNotes> getAllCourseNotes() {
         databaseExecutor.execute(()->{
-            mAllAssessmentNotes = mAssessmentNotesDAO.getAllNotes();
+            mAllCourseNotes = mCourseNotesDAO.getAllNotes();
         });
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return mAllAssessmentNotes;
+        return mAllCourseNotes;
     }
-    public List<AssessmentNotes> getAllAssessmentNotesByAssessment(int assessmentID) {
+    public List<CourseNotes> getAllCourseNotesByCourse(int courseID) {
         databaseExecutor.execute(()->{
-            mAllAssessmentNotesByAssessment = mAssessmentNotesDAO.getAllNotesByAssessment(assessmentID);
+            mAllCourseNotesByCourse = mCourseNotesDAO.getAllNotesByCourse(courseID);
         });
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return mAllAssessmentNotesByAssessment;
+        return mAllCourseNotesByCourse;
     }
-    public void insert(AssessmentNotes assessmentNotes) {
+    public void insert(CourseNotes courseNotes) {
         databaseExecutor.execute(()->{
-            mAssessmentNotesDAO.insert(assessmentNotes);
-        });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    public void update(AssessmentNotes assessmentNotes) {
-        databaseExecutor.execute(()->{
-            mAssessmentNotesDAO.update(assessmentNotes);
+            mCourseNotesDAO.insert(courseNotes);
         });
         try {
             Thread.sleep(1000);
@@ -246,9 +236,19 @@ public class Repository {
             e.printStackTrace();
         }
     }
-    public void delete(AssessmentNotes assessmentNotes) {
+    public void update(CourseNotes courseNotes) {
         databaseExecutor.execute(()->{
-            mAssessmentNotesDAO.delete(assessmentNotes);
+            mCourseNotesDAO.update(courseNotes);
+        });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    public void delete(CourseNotes courseNotes) {
+        databaseExecutor.execute(()->{
+            mCourseNotesDAO.delete(courseNotes);
         });
         try {
             Thread.sleep(1000);

@@ -11,11 +11,11 @@ package android.coursetrackerapp.coursetracker.Database;/**
 
 import android.content.Context;
 import android.coursetrackerapp.coursetracker.dao.AssessmentDAO;
-import android.coursetrackerapp.coursetracker.dao.AssessmentNotesDAO;
+import android.coursetrackerapp.coursetracker.dao.CourseNotesDAO;
 import android.coursetrackerapp.coursetracker.dao.CourseDAO;
 import android.coursetrackerapp.coursetracker.dao.TermDAO;
 import android.coursetrackerapp.coursetracker.entities.Assessment;
-import android.coursetrackerapp.coursetracker.entities.AssessmentNotes;
+import android.coursetrackerapp.coursetracker.entities.CourseNotes;
 import android.coursetrackerapp.coursetracker.entities.Course;
 import android.coursetrackerapp.coursetracker.entities.Term;
 
@@ -24,12 +24,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 /** CourseTrackerDatabaseBuilder */
-@Database(entities = {Term.class, Course.class, Assessment.class, AssessmentNotes.class}, version = 5, exportSchema = false)
+@Database(entities = {Term.class, Course.class, Assessment.class, CourseNotes.class}, version = 7, exportSchema = false)
 public abstract class CourseTrackerDatabaseBuilder extends RoomDatabase {
     public abstract TermDAO termDAO();
     public abstract CourseDAO courseDAO();
     public abstract AssessmentDAO assessmentDAO();
-    public abstract AssessmentNotesDAO assessmentNotesDAO();
+    public abstract CourseNotesDAO courseNotesDAO();
 
     private static volatile CourseTrackerDatabaseBuilder INSTANCE;
 

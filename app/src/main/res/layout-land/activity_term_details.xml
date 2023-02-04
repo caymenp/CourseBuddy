@@ -41,22 +41,24 @@
                 android:paddingBottom="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="148dp"
                     android:layout_height="wrap_content"
                     android:text="Start Date: "
+                    android:textAlignment="textEnd"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/startDateView"
-                    android:layout_width="121dp"
+                    android:layout_width="158dp"
                     android:layout_height="wrap_content"
                     android:text="START HERE "
                     android:textAlignment="center" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="122dp"
                     android:layout_height="wrap_content"
                     android:text="End Date: "
+                    android:textAlignment="textEnd"
                     android:textStyle="bold" />
 
                 <TextView

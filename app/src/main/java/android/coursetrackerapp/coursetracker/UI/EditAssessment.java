@@ -3,24 +3,29 @@ package android.coursetrackerapp.coursetracker.UI;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.coursetrackerapp.coursetracker.Database.Repository;
 import android.coursetrackerapp.coursetracker.R;
 import android.coursetrackerapp.coursetracker.entities.Assessment;
-import android.coursetrackerapp.coursetracker.entities.AssessmentNotes;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class EditAssessment extends AppCompatActivity {
     EditText editName;
     Button editStartDate;
     Button editEndDate;
-    EditText editAssessmentType;
+    Spinner typeSpinner;
 
     int assessmentID;
     int courseID;
@@ -41,7 +46,7 @@ public class EditAssessment extends AppCompatActivity {
         editName = findViewById(R.id.assessmentName);
         editStartDate = findViewById(R.id.assessmentStartDate);
         editEndDate = findViewById(R.id.assessmentEndDate);
-        editAssessmentType = findViewById(R.id.assessmentType);
+        typeSpinner = findViewById(R.id.typeSpinner);
 
         assessmentID = getIntent().getIntExtra("assessmentID", -1);
         courseID = getIntent().getIntExtra("courseID", -1);
@@ -50,9 +55,10 @@ public class EditAssessment extends AppCompatActivity {
         startDate = getIntent().getStringExtra("assessmentStartDate");
         endDate = getIntent().getStringExtra("assessmentEndDate");
 
-        //If Data is passed, pre-fill the fields with the data
+
+        initializeAssessmentType();
+
         editName.setText(assessmentName);
-        editAssessmentType.setText(assessmentType);
         editStartDate.setText(startDate);
         editEndDate.setText(endDate);
 
@@ -97,19 +103,43 @@ public class EditAssessment extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (assessmentID == -1) {
-                    assessment = new Assessment(0, courseID, editAssessmentType.getText().toString(),
+                    assessment = new Assessment(0, courseID, typeSpinner.getSelectedItem().toString(),
                             editName.getText().toString(), editStartDate.getText().toString(), editEndDate.getText().toString());
                     repo.insert(assessment);
-                    finish();
+                    updateUI();
                 } else {
-                    assessment = new Assessment(assessmentID, courseID, editAssessmentType.getText().toString(),
+                    assessment = new Assessment(assessmentID, courseID, typeSpinner.getSelectedItem().toString(),
                             editName.getText().toString(), editStartDate.getText().toString(), editEndDate.getText().toString());
                     repo.update(assessment);
-                    finish();
+                    updateUI();
                 }
             }
         });
+    }
+
+    private void initializeAssessmentType() {
+        typeSpinner = findViewById(R.id.typeSpinner);
+        ArrayList<String> assessmentType = new ArrayList<>();
+        assessmentType.add("Objective");
+        assessmentType.add("Performance");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+                android.R.layout.simple_spinner_dropdown_item, assessmentType);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        typeSpinner.setAdapter(adapter);
+    }
+
+    private void updateUI() {
+        Intent intent = new Intent();
+        intent.putExtra("assessmentTitle", editName.getText().toString());
+        intent.putExtra("startDate", editStartDate.getText().toString());
+        intent.putExtra("endDate", editEndDate.getText().toString());
+        intent.putExtra("assessmentType", typeSpinner.getSelectedItem().toString());
+        setResult(92, intent);
+        finish();
     }
 
     @Override
