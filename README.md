@@ -14,7 +14,7 @@
 </ul>
 
 <p>Course Buddy Flow Diagram</p>
-<a href="https://drive.google.com/uc?export=view&id=10_Rq89suExYFnDuZcCm4hzQqU4gl5N4k" target="_blank" rel="noopener noreferrer">View PDF</a>
+<a target="_blank" rel="noopener noreferrer" href="https://drive.google.com/uc?export=view&id=10_Rq89suExYFnDuZcCm4hzQqU4gl5N4k">View PDF</a>
 
 
   
